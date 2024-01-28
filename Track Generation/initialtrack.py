@@ -21,14 +21,15 @@ while running:
     screen.fill(backgroundColour)
 
     # initialize variables for ellipse
+    trackColour = (53, 57, 53)
+    trackWidth = 100
     ellipseWidth = 800
     ellipseHeight = 400
-    trackColour = (53, 57, 53)
     ellipseX = (screen.get_width() - ellipseWidth) / 2 # center ellipse in middle of screen
     ellipseY = (screen.get_height() - ellipseHeight) / 2 # center ellipse in middle of screen
 
     # draw ellipse
-    pygame.draw.ellipse(screen, trackColour, (ellipseX, ellipseY, ellipseWidth, ellipseHeight), 100)
+    pygame.draw.ellipse(screen, trackColour, (ellipseX, ellipseY, ellipseWidth, ellipseHeight), trackWidth)
 
     # initiliaze variables for starting line
     startLineWidth = 10
