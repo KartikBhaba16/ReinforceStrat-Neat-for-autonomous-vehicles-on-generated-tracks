@@ -32,13 +32,14 @@ while running:
     pygame.draw.ellipse(screen, trackColour, (ellipseX, ellipseY, ellipseWidth, ellipseHeight), trackWidth)
 
     # initiliaze variables for starting line
+    startLineColour = (255, 255, 255)
     startLineWidth = 10
     startLineHeight = ellipseHeight / 4  # start line is 1/4 of the total ellipse height
     startLineX = (ellipseX + ellipseWidth / 2) - (startLineWidth / 2) # center start line in middle of ellipse
     startLineY = ellipseY + ellipseHeight - startLineHeight  # set ellipse y to the bottom of the ellipse
 
     # draw starting line
-    pygame.draw.rect(screen, (255, 255, 255), (startLineX, startLineY, startLineWidth, startLineHeight))
+    pygame.draw.rect(screen, startLineColour, (startLineX, startLineY, startLineWidth, startLineHeight))
 
     # update screen
     pygame.display.flip()
