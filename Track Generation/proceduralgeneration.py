@@ -1,11 +1,18 @@
+# COMP 4431 - Advanced Project
+# Group 7
+# Procedural Generation
+# - Matthew Richard -
+
 # import libraries
 import pygame
 import random
 import math
 
+
 # method to randomly generate points
 def generatePoints(numPoints):
 
+    # initialize variables
     screenWidth = screen.get_width()
     screenHeight = screen.get_height()
     screenCenterX = screenWidth / 2
@@ -13,8 +20,8 @@ def generatePoints(numPoints):
     trackRangeX = screenWidth / 3
     trackRangeY = screenHeight / 3
     skew = 100
-
     trackPoints = []
+
     for i in range(numPoints):
         angle = ((2 * math.pi) * i) / numPoints # calculate where the point would lie on a circle evenly divided by the number of points
         x = screenCenterX + (trackRangeX * math.cos(angle)) + random.randint(-skew, skew) # parametric equation of ellipse for X value
@@ -24,18 +31,20 @@ def generatePoints(numPoints):
     # return track points
     return trackPoints
 
+
 # method to calculate tangets of points
 def calculateTangets(points):
 
+    # create vector
     tangents = []
 
     for i in range(len(points)):
-
         nextPoint = points[(i + 1) % len(points)] # get next point
         tangent = (nextPoint[0] - points[i][0], nextPoint[1] - points[i][1]) # calculate tangent between points
         tangents.append(tangent) # add tangent to vector
         
     return tangents
+
 
 # method to calculate hermite curve points
 def calculateHermite(t, p0, p1, m0, m1):
@@ -53,27 +62,17 @@ def calculateHermite(t, p0, p1, m0, m1):
     # return curve point coordinates
     return x, y
 
-pygame.init()
-screen = pygame.display.set_mode((1280, 720))
-pygame.display.set_caption('Procedural Generation Racetrack')
-running = True
 
-numberOfPoints = 5  
-points = generatePoints(numberOfPoints)
-tangents = calculateTangets(points)
-backgroundColour = (80, 200, 120)
+# method to draw track to the screen
+def drawTrack(screen, points, tangents):
 
-while running:
-
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-    screen.fill(backgroundColour)  # fill background with green to resemble grass
-
+    # initialize variables
+    trackColour = (53, 57, 53) # grey for road
+    trackSize = 50 # width of track
     numberOfCurvePoints = 2000 # points along hermite curve
 
     for i in range(len(points)):
+        # Get points and tangents from vectors
         p0 = points[i]
         p1 = points[(i + 1) % len(points)]
         m0 = tangents[i]
@@ -81,8 +80,30 @@ while running:
 
         for j in range(numberOfCurvePoints):
             t = j / numberOfCurvePoints
-            curvePoints = calculateHermite(t, p0, p1, m0, m1) # calculate hermite curve point
-            pygame.draw.circle(screen, (53, 57, 53), curvePoints, 50) # draw hermite curve point to screen
+            curvePoints = calculateHermite(t, p0, p1, m0, m1) # calculate point on hermite curve
+            pygame.draw.circle(screen, trackColour, curvePoints, trackSize) # draw point on hermite curve
+
+
+pygame.init()
+screen = pygame.display.set_mode((1280, 720))
+pygame.display.set_caption('Procedural Generation Racetrack')
+running = True
+
+# initialize variables
+numberOfPoints = 8 # number of points on the track
+points = generatePoints(numberOfPoints) # call random point generation method
+tangents = calculateTangets(points) # call method to calculate tangets
+backgroundColour = (80, 200, 120) # green for grass background
+
+while running:
+
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+
+    screen.fill(backgroundColour) # fill background with green to resemble grass
+
+    drawTrack(screen, points, tangents) # call method to draw the track
 
     pygame.display.flip()
 
