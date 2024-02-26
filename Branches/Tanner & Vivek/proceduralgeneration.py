@@ -9,13 +9,11 @@ import pygame
 import random
 import math
 
-
 # method to randomly generate points
 def generatePoints(numPoints):
-
     # initialize variables
-    screenWidth = screen.get_width()
-    screenHeight = screen.get_height()
+    screenWidth = 1280
+    screenHeight = 720
     screenCenterX = screenWidth / 2
     screenCenterY = screenHeight / 2
     trackRangeX = screenWidth / 3
@@ -88,7 +86,6 @@ def drawTrack(screen, points, tangents):
             pygame.draw.circle(screen, trackColour, curvePoints, trackSize) # draw point on hermite curve
 
     return track_pixel_points # return list of points on the hermite curve
-
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))

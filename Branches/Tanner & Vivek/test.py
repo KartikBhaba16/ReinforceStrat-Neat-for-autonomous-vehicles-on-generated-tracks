@@ -141,7 +141,8 @@ def run_simulation(genomes, config):
         pygame.display.set_caption("Car Simulation")
 
         # Load the track image
-        track_image = pygame.image.load('track5.png').convert()
+        track_image_path = os.path.join("Assets", "map.png")
+        track_image = pygame.image.load(track_image_path).convert()
 
         # Create car instances for each genome
         cars = []
@@ -190,7 +191,7 @@ def run_simulation(genomes, config):
                     ge.pop(x)
 
             # Drawing
-            screen.blit(track_image, (0, 0))
+            screen.blit(track_image, (0,  0))
             for car in cars:
                 car.display_car(screen)
 
