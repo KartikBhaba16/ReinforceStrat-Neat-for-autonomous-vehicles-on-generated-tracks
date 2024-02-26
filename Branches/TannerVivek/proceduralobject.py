@@ -1,4 +1,5 @@
 #Tanner Boyle
+#Vivek Sheth
 #Encapsulates the procedural generation of a racetrack, including the generation of points, tangents, and the Hermite curve
 #February 26 2024
 
