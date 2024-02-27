@@ -17,10 +17,10 @@ from proceduralobject import ProceduralObject
 WIDTH = 1920
 HEIGHT = 1080
 
-CAR_SIZE_X = 60    
-CAR_SIZE_Y = 60
+CAR_SIZE_X = 30    
+CAR_SIZE_Y = 30
 
-BORDER_COLOR = (80, 200, 100) # Color To Crash on Hit
+BORDER_COLOR = (80, 200, 120) # Color To Crash on Hit
 
 current_generation = 0 # Generation counter
 
@@ -28,13 +28,14 @@ class Car:
 
     def __init__(self):
         # Load Car Sprite and Rotate
-        sprite_path = os.path.join("Assets", "car.png")
+        sprite_path = os.path.join(r"C:\Users\beake\OneDrive\Documents\GitHub\COMP4431\Assets", "car.png")
         self.sprite = pygame.image.load(sprite_path).convert_alpha()
         
+        self.clock = pygame.time.Clock()
         self.sprite = pygame.transform.scale(self.sprite, (CAR_SIZE_X, CAR_SIZE_Y))
         self.rotated_sprite = self.sprite 
 
-        self.position = [830, 920] # Starting Position
+        self.position = [1000, 920] # Starting Position
         self.angle = 0
         self.speed = 0
 
@@ -48,7 +49,7 @@ class Car:
         self.alive = True # Boolean To Check If Car is Crashed
 
         self.distance = 0 # Distance Driven
-        self.time = 0 # Time Passed
+        self.time = 0 # Time Driven
 
     def draw(self, screen):
         screen.blit(self.rotated_sprite, self.position) # Draw Sprite
@@ -123,15 +124,16 @@ class Car:
             self.speed_set = True
 
         # Get Rotated Sprite And Move Into The Right X-Direction
-        # Don't Let The Car Go Closer Than 20px To The Edge
+        # Don't Let The Car Go Closer Than 5px To The Edge
         self.rotated_sprite = self.rotate_center(self.sprite, self.angle)
         self.position[0] += math.cos(math.radians(360 - self.angle)) * self.speed
-        self.position[0] = max(self.position[0], 20)
+        self.position[0] = max(self.position[0], 5)
         self.position[0] = min(self.position[0], WIDTH - 120)
 
         # Increase Distance and Time
         self.distance += self.speed
-        self.time += 1
+        self.clock.tick(60)
+        self.time = self.clock.get_time()
         
         # Same For Y-Position
         self.position[1] += math.sin(math.radians(360 - self.angle)) * self.speed
@@ -173,8 +175,7 @@ class Car:
 
     def get_reward(self):
         # Calculate Reward (Maybe Change?)
-        # return self.distance / 50.0
-        return self.distance / (CAR_SIZE_X / 2)
+        return (self.time / 1000) + (self.distance / 10)
 
     def rotate_center(self, image, angle):
         # Rotate The Rectangle
@@ -196,7 +197,7 @@ def run_simulation(genomes, config):
     pygame.init()
     screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.WINDOWMAXIMIZED)
 
-    track = ProceduralObject(WIDTH, HEIGHT, 8, WIDTH / 3, HEIGHT / 3, 100, 50, 2000)
+    track = ProceduralObject(WIDTH, HEIGHT, 8, WIDTH / 3, HEIGHT / 3, 100, 75, 2000)
     track.generatePoints()
     track.calculateTangets()
     global track_points 
@@ -211,8 +212,11 @@ def run_simulation(genomes, config):
         net = neat.nn.FeedForwardNetwork.create(g, config)
         nets.append(net)
         g.fitness = 0
-
         cars.append(Car())
+    
+    #Set starting position
+    for car in cars:
+        car.position = [track_points[3][0], track_points[3][1]]
 
     # Clock Settings
     # Font Settings & Loading Map
@@ -232,7 +236,7 @@ def run_simulation(genomes, config):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 sys.exit(0)
-
+        print
         # For Each Car Get The Acton It Takes
         for i, car in enumerate(cars):
             output = nets[i].activate(car.get_data())
@@ -279,14 +283,14 @@ def run_simulation(genomes, config):
         text_rect = text.get_rect()
         text_rect.topleft = (10, 50)  # Set the top left position of the text
         screen.blit(text, text_rect)
-
+        
         pygame.display.flip()
         clock.tick(60) # 60 FPS
 
 if __name__ == "__main__":
     
     # Load Config
-    config_path = "C:\\Users\\Tanner\\Documents\\GitHub\\COMP4431\\Branches\\TannerVivek\\config-feedforward.txt"
+    config_path = "C:\\Users\\beake\\Downloads\\COMP4431-main\\COMP4431-main\\Branches\\TannerVivek\\config-feedforward.txt"
     config = neat.config.Config(neat.DefaultGenome, neat.DefaultReproduction, neat.DefaultSpeciesSet, neat.DefaultStagnation, config_path)
 
     # Create Population And Add Reporters
@@ -294,6 +298,6 @@ if __name__ == "__main__":
     population.add_reporter(neat.StdOutReporter(True))
     stats = neat.StatisticsReporter()
     population.add_reporter(stats)
-    
     # Run Simulation For A Maximum of 1000 Generations
     population.run(run_simulation, 1000)
+    print("Simulation Finished")
