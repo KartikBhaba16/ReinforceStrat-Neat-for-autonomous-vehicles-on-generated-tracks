@@ -31,7 +31,7 @@ class Car:
 
     def __init__(self):
         # Load Car Sprite and Rotate
-        sprite_path = os.path.join(r"C:\Users\Tanner\Documents\GitHub\Assets", "car.png")
+        sprite_path = os.path.join(r"C:\Users\beake\OneDrive\Documents\GitHub\COMP4431\Assets", "car.png")
         self.sprite = pygame.image.load(sprite_path).convert_alpha()
         
         self.clock = pygame.time.Clock()
@@ -42,7 +42,8 @@ class Car:
         self.angle = 0
         self.speed = 0
 
-        self.speed_set = False # Flag For Default Speed Later on
+        self.speed_set = False
+
 
         self.center = [self.position[0] + CAR_SIZE_X / 2, self.position[1] + CAR_SIZE_Y / 2] # Calculate Center
 
@@ -53,6 +54,7 @@ class Car:
 
         self.distance = 0 # Distance Driven
         self.time = 0 # Time Driven
+        self.checkpoints = 0 # Checkpoints Passed
 
     def draw(self, screen):
         screen.blit(self.rotated_sprite, self.position) # Draw Sprite
@@ -73,6 +75,8 @@ class Car:
             # Check if point is within the boundaries of the game_map
             if 0 <= int(point[0]) < map_width and 0 <= int(point[1]) < map_height:
             # If any corner touches border color -> crash
+                if game_map.get_at((int(point[0]), int(point[1]))) == (255, 95, 31):
+                    self.checkpoints +=1
                 if game_map.get_at((int(point[0]), int(point[1]))) == BORDER_COLOR:
                     self.alive = False
                     break
@@ -120,7 +124,7 @@ class Car:
 
     
     def update(self, game_map):
-        # Set The Speed To 20 For The First Time
+        # Set The Speed To 5 For The First Time
         # Only When Having 4 Output Nodes With Speed Up and Down
         if not self.speed_set:
             self.speed = 20
@@ -178,7 +182,7 @@ class Car:
 
     def get_reward(self):
         # Calculate Reward (Maybe Change?)
-        return (self.time / 1000) + (self.distance / 10)
+        return (self.time / 10000) + (self.distance / 10) + (self.checkpoints / 10)
 
     def rotate_center(self, image, angle):
         # Rotate The Rectangle
@@ -219,7 +223,7 @@ def run_simulation(genomes, config):
     
     #Set starting position
     for car in cars:
-        car.position = [track_points[3][0], track_points[3][1]]
+        car.position = [track_points[1][0], track_points[1][1]]
 
     # Clock Settings
     # Font Settings & Loading Map
@@ -249,10 +253,10 @@ def run_simulation(genomes, config):
             elif choice == 1:
                 car.angle -= 10 # Right
             elif choice == 2:
-                if(car.speed - 2 >= 12):
-                    car.speed -= 2 # Slow Down
+                if(car.speed - 1 >= 20):
+                    car.speed -= 1 # Slow Down
             else:
-                car.speed += 2 # Speed Up
+                car.speed += 1 # Speed Up
         
         # Check If Car Is Still Alive
         # Increase Fitness If Yes And Break Loop If Not
@@ -262,6 +266,7 @@ def run_simulation(genomes, config):
                 still_alive += 1
                 car.update(game_map)
                 genomes[i][1].fitness += car.get_reward()
+        
 
         if still_alive == 0:
             break
@@ -293,7 +298,7 @@ def run_simulation(genomes, config):
 if __name__ == "__main__":
     
     # Load Config
-    config_path = "C:\\Users\\Tanner\\Documents\\GitHub\\COMP4431\\Branches\\TannerVivek\\config-feedforward.txt"
+    config_path = "C:/Users/beake/OneDrive/Documents/GitHub/COMP4431/Branches/TannerVivek/config-feedforward.txt"
     config = neat.config.Config(neat.DefaultGenome, neat.DefaultReproduction, neat.DefaultSpeciesSet, neat.DefaultStagnation, config_path)
 
     # Create Population And Add Reporters
