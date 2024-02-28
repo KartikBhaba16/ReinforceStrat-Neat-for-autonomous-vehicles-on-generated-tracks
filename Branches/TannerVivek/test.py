@@ -1,5 +1,4 @@
-# This Code is Heavily Inspired By The YouTuber: Cheesy AI
-# Code Changed, Optimized And Commented By: NeuralNine (Florian Dedov)
+
 
 import math
 import random
@@ -210,8 +209,7 @@ def run_simulation(genomes, config):
     game_map_path = os.path.join("Assets", "map.png")
     global game_map
     game_map = pygame.image.load(game_map_path)
-    print(track.tangents)
-
+    
     # For All Genomes Passed Create A New Neural Network
     for i, g in genomes:
         net = neat.nn.FeedForwardNetwork.create(g, config)

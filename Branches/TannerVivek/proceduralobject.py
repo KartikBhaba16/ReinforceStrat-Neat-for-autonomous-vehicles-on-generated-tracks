@@ -35,6 +35,7 @@ class ProceduralObject:
             nextPoint = self.points[(i + 1) % len(self.points)]
             tangent = (nextPoint[0] - self.points[i][0], nextPoint[1] - self.points[i][1])
             self.tangents.append(tangent)
+            
 
     def calculateHermite(self, t, p0, p1, m0, m1):
         h00 = (2 * pow(t, 3)) - (3 * pow(t, 2)) + 1
@@ -58,8 +59,11 @@ class ProceduralObject:
                 curvePoints = self.calculateHermite(t, p0, p1, m0, m1)
                 track_pixel_points.append(curvePoints)
                 pygame.draw.circle(screen, trackColour, curvePoints, self.trackSize)
+        for point in self.points:
+            pygame.draw.circle(screen, (255, 95, 31), (point[0], point[1]), 10)
         return track_pixel_points
 
+        
     def saveImage(self, image_path):
         pygame.image.save(screen, image_path)
 
