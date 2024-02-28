@@ -9,6 +9,10 @@ import os
 import neat
 import pygame
 from proceduralobject import ProceduralObject
+import functools
+import operator
+import statistics
+import visualize
 
 # Constants
 # WIDTH = 1600
@@ -17,8 +21,8 @@ from proceduralobject import ProceduralObject
 WIDTH = 1920
 HEIGHT = 1080
 
-CAR_SIZE_X = 30    
-CAR_SIZE_Y = 30
+CAR_SIZE_X = 50    
+CAR_SIZE_Y = 50
 
 BORDER_COLOR = (80, 200, 120) # Color To Crash on Hit
 
@@ -28,7 +32,7 @@ class Car:
 
     def __init__(self):
         # Load Car Sprite and Rotate
-        sprite_path = os.path.join(r"C:\Users\beake\OneDrive\Documents\GitHub\COMP4431\Assets", "car.png")
+        sprite_path = os.path.join(r"C:\Users\Tanner\Documents\GitHub\Assets", "car.png")
         self.sprite = pygame.image.load(sprite_path).convert_alpha()
         
         self.clock = pygame.time.Clock()
@@ -206,6 +210,7 @@ def run_simulation(genomes, config):
     game_map_path = os.path.join("Assets", "map.png")
     global game_map
     game_map = pygame.image.load(game_map_path)
+    print(track.tangents)
 
     # For All Genomes Passed Create A New Neural Network
     for i, g in genomes:
@@ -290,7 +295,7 @@ def run_simulation(genomes, config):
 if __name__ == "__main__":
     
     # Load Config
-    config_path = "C:\\Users\\beake\\Downloads\\COMP4431-main\\COMP4431-main\\Branches\\TannerVivek\\config-feedforward.txt"
+    config_path = "C:\\Users\\Tanner\\Documents\\GitHub\\COMP4431\\Branches\\TannerVivek\\config-feedforward.txt"
     config = neat.config.Config(neat.DefaultGenome, neat.DefaultReproduction, neat.DefaultSpeciesSet, neat.DefaultStagnation, config_path)
 
     # Create Population And Add Reporters
@@ -299,5 +304,5 @@ if __name__ == "__main__":
     stats = neat.StatisticsReporter()
     population.add_reporter(stats)
     # Run Simulation For A Maximum of 1000 Generations
-    population.run(run_simulation, 1000)
+    population.run(run_simulation, 100)
     print("Simulation Finished")

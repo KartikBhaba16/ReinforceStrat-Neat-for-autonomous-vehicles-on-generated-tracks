@@ -1,11 +1,22 @@
 import pygame as py
 from config_variables import *
 from car import decodeCommand
-from vect2d import vect2d
 from node import *
 
 py.font.init()
 
+class vect2d:
+    def __init__(self, x=-1, y=-1, angle=0):
+        self.x = x
+        self.y = y
+        self.angle = angle
+
+    def co(self, x,y):
+        self.x = x
+        self.y = y
+
+    def getCo(self):
+        return (self.x, self.y)
 class NN:
 
     def __init__(self, config, genome, pos):
@@ -20,7 +31,7 @@ class NN:
         nodeIdList = []
 
         #nodes
-        h = (INPUT_NEURONS-1)*(NODE_RADIUS*2 + NODE_SPACING)
+        h = (INPUT_NEURONS-1)*(20*2 + NODE_SPACING)
         for i, input in enumerate(config.genome_config.input_keys):
             n = Node(input, pos[0], pos[1]+int(-h/2 + i*(NODE_RADIUS*2 + NODE_SPACING)), INPUT, [GREEN_PALE, GREEN, DARK_GREEN_PALE, DARK_GREEN], input_names[i], i)
             self.nodes.append(n)
