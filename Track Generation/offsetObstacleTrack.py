@@ -98,15 +98,16 @@ backgroundColour = (80, 200, 120) # green for grass background
 pylonColour = (255, 95, 31)
 pylonSize = 10
 obstacles = []
-obstacleSkew = 40
+obstacleSkew = 35
 
+# get position of obstacles with offset and add to vector
 for point in points:
 
-    obstacleXSkew = random.randint(-obstacleSkew, obstacleSkew)
-    obstacleYSkew = random.randint(-obstacleSkew, obstacleSkew)
+    obstacleXSkew = random.randint(-obstacleSkew, obstacleSkew) # random offset for x coordinate
+    obstacleYSkew = random.randint(-obstacleSkew, obstacleSkew) # random offset for y coordinate
     obstaclePosition = (point[0] + obstacleXSkew, point[1] + obstacleYSkew)
 
-    obstacles.append(obstaclePosition)
+    obstacles.append(obstaclePosition) # add position
 
 while running:
 
@@ -118,6 +119,7 @@ while running:
 
     drawTrack(screen, points, tangents) # call method to draw the track
 
+    # draw obstacles
     for obstacle in obstacles:
         pygame.draw.circle(screen, pylonColour, obstacle, pylonSize)
 
