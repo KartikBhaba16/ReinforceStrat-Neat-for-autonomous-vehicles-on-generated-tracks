@@ -214,8 +214,8 @@ def run_simulation(genomes, config):
     track.calculateTangets()
     global track_points
     track_points = track.points
-    global track_tangets
-    track_tangents = track.tangets
+    global track_tangents
+    track_tangents = track.tangents
     track.drawTrack(screen)
     game_map_path = os.path.join("Assets", "map.png")
     global game_map
