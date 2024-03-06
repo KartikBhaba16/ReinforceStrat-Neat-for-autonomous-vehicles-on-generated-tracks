@@ -42,7 +42,7 @@ class Car:
         self.position = [starting_point[0], starting_point[1]] # set starting position to first point on track
 
         starting_tangent = track_tangents[0] # get first calculated tangent
-        starting_angle = math.degrees(math.atan(starting_tangent)) # get angle of the tangent
+        starting_angle = math.degrees(math.atan2(starting_tangent[1], starting_tangent[0])) # get angle of the tangent
         self.angle = starting_angle # set car to angle relative to its starting point
 
         self.speed = 0
