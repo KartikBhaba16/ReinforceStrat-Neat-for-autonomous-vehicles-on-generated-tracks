@@ -108,9 +108,8 @@ for point in points:
 
     obstacles.append(obstaclePosition) # add position
 
-# Load the image outside of the game loop, after initializing Pygame but before the loop starts
+# add image for obstacle and resize
 obstacleImage = pygame.image.load('Track Generation\obstacleAssets\carObstacle.png').convert_alpha()
-# Optionally, scale the image if it's not the desired size
 obstacleImage = pygame.transform.scale(obstacleImage, (obstacleSize, obstacleSize))
 
 
