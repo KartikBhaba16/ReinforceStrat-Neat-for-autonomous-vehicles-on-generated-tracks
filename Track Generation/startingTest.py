@@ -85,12 +85,11 @@ def drawTrack(screen, points, tangents):
             curvePoints = calculateHermite(t, p0, p1, m0, m1) # calculate point on hermite curve
             pygame.draw.circle(screen, trackColour, curvePoints, trackSize) # draw point on hermite curve
 
-    startingPoint = (points[0][0] - car.get_width() / 2, points[0][1] - car.get_height() / 2)
+    startingPoint = (points[0][0], points[0][1])
     startingTangent = tangents[0]
     startingAngle = math.degrees(math.atan2(startingTangent[1], startingTangent[0]))
-    print("Starting angle:", startingAngle)
-    rotated_car = pygame.transform.rotate(car, startingAngle)
-    screen.blit(rotated_car, startingPoint)
+    transformedCar = pygame.transform.rotate(car, startingAngle)
+    screen.blit(transformedCar, transformedCar.get_rect(center=startingPoint))
 
 pygame.init()
 screen = pygame.display.set_mode((1280, 720))
