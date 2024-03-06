@@ -9,7 +9,6 @@ import random
 import math
 
 car = pygame.image.load('Track Generation\obstacleAssets\carObstacle.png')
-print("Car image loaded successfully:", car)
 car = pygame.transform.scale(car, (50, 50))
 
 # method to randomly generate points
@@ -90,7 +89,6 @@ def drawTrack(screen, points, tangents):
     startingTangent = tangents[0]
     startingAngle = math.degrees(math.atan2(startingTangent[1], startingTangent[0]))
     print("Starting angle:", startingAngle)
-
     rotated_car = pygame.transform.rotate(car, startingAngle)
     screen.blit(rotated_car, startingPoint)
 
