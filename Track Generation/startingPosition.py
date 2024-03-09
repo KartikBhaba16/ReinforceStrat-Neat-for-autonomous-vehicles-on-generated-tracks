@@ -38,13 +38,8 @@ class Car:
         self.sprite = pygame.transform.scale(self.sprite, (CAR_SIZE_X, CAR_SIZE_Y))
         self.rotated_sprite = self.sprite 
 
-        starting_point = track_points[0] # get first point on track
-        self.position = [starting_point[0], starting_point[1]] # set starting position to first point on track
-
-        starting_tangent = track_tangents[0] # get first calculated tangent
-        starting_angle = math.degrees(math.atan2(starting_tangent[1], starting_tangent[0])) # get angle of the tangent
-        self.angle = starting_angle # set car to angle relative to its starting point
-
+        self.position = [1000, 920] # Starting Position
+        self.angle = 0
         self.speed = 0
 
         self.speed_set = False
@@ -212,10 +207,8 @@ def run_simulation(genomes, config):
     track = ProceduralObject(WIDTH, HEIGHT, 8, WIDTH / 3, HEIGHT / 3, 100, 75, 2000)
     track.generatePoints()
     track.calculateTangets()
-    global track_points
+    global track_points 
     track_points = track.points
-    global track_tangents
-    track_tangents = track.tangents
     track.drawTrack(screen)
     game_map_path = os.path.join("Assets", "map.png")
     global game_map
@@ -228,9 +221,15 @@ def run_simulation(genomes, config):
         g.fitness = 0
         cars.append(Car())
     
-    #Set starting position
+    start_point = track_points[6]   # set starting point to point 6 (Top of the track)
+    next_point = track_points[7] # set next point to point 7
+    tangent_x = next_point[0] - start_point[0] # calculate x value for the slope of the tangent
+    tangent_y = next_point[1] - start_point[1] # calculate y value for the slope of the tangent
+    start_angle = math.degrees(math.atan2(tangent_y, tangent_x)) # calculate angle
+
     for car in cars:
-        car.position = [track_points[1][0], track_points[1][1]]
+        car.position = [start_point[0], start_point[1]]
+        car.angle = start_angle
 
     # Clock Settings
     # Font Settings & Loading Map
@@ -305,7 +304,7 @@ def run_simulation(genomes, config):
 if __name__ == "__main__":
     
     # Load Config
-    config_path = "C:/Users/beake/OneDrive/Documents/GitHub/COMP4431/Branches/TannerVivek/config-feedforward.txt"
+    config_path = "Branches\TannerVivek\config-feedforward.txt"
     config = neat.config.Config(neat.DefaultGenome, neat.DefaultReproduction, neat.DefaultSpeciesSet, neat.DefaultStagnation, config_path)
 
     # Create Population And Add Reporters
