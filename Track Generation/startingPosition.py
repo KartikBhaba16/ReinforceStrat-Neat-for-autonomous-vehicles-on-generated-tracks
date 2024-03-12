@@ -31,7 +31,7 @@ class Car:
 
     def __init__(self):
         # Load Car Sprite and Rotate
-        sprite_path = os.path.join(r"C:\Users\beake\OneDrive\Documents\GitHub\COMP4431\Assets", "car.png")
+        sprite_path = os.path.join(r":\Users\beake\OneDrive\Documents\GitHub\COMP4431\Assets", "car.png")
         self.sprite = pygame.image.load(sprite_path).convert_alpha()
         
         self.clock = pygame.time.Clock()
@@ -199,20 +199,6 @@ def run_simulation(genomes, config):
     # Empty Collections For Nets and Cars
     nets = []
     cars = []
-
-    # Initialize PyGame And The Display
-    pygame.init()
-    screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.WINDOWMAXIMIZED)
-
-    track = ProceduralObject(WIDTH, HEIGHT, 8, WIDTH / 3, HEIGHT / 3, 100, 75, 2000)
-    track.generatePoints()
-    track.calculateTangets()
-    global track_points 
-    track_points = track.points
-    track.drawTrack(screen)
-    game_map_path = os.path.join("Assets", "map.png")
-    global game_map
-    game_map = pygame.image.load(game_map_path)
     
     # For All Genomes Passed Create A New Neural Network
     for i, g in genomes:
@@ -286,7 +272,7 @@ def run_simulation(genomes, config):
         for car in cars:
             if car.is_alive():
                 car.draw(screen)
-        
+
         # Display Info
         text = generation_font.render("Generation: " + str(current_generation), True, (255,255,255))
         text_rect = text.get_rect()
@@ -298,14 +284,28 @@ def run_simulation(genomes, config):
         text_rect.topleft = (10, 50)  # Set the top left position of the text
         screen.blit(text, text_rect)
         
-        pygame.display.flip()
+        pygame.display.update() # update screen to show cars drawn
         clock.tick(60) # 60 FPS
 
 if __name__ == "__main__":
-    
+
+    pygame.init()
+    screen = pygame.display.set_mode((WIDTH, HEIGHT), pygame.WINDOWMAXIMIZED)
+
     # Load Config
     config_path = "Branches\TannerVivek\config-feedforward.txt"
     config = neat.config.Config(neat.DefaultGenome, neat.DefaultReproduction, neat.DefaultSpeciesSet, neat.DefaultStagnation, config_path)
+
+    # create track, find its variables, and draw the track to the screen
+    track = ProceduralObject(WIDTH, HEIGHT, 8, WIDTH / 3, HEIGHT / 3, 100, 75, 2000)
+    track.generatePoints()
+    track.calculateTangets()
+    global track_points 
+    track_points = track.points
+    track.drawTrack(screen)
+    game_map_path = os.path.join("Assets", "map.png")
+    global game_map
+    game_map = pygame.image.load(game_map_path)
 
     # Create Population And Add Reporters
     population = neat.Population(config)
