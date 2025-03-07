@@ -20,8 +20,8 @@ import visualize
 WIDTH = 1920
 HEIGHT = 1080
 
-CAR_SIZE_X = 50    
-CAR_SIZE_Y = 50
+CAR_SIZE_X = 30    
+CAR_SIZE_Y = 30
 
 BORDER_COLOR = (80, 200, 120) # Color To Crash on Hit
 
@@ -31,19 +31,18 @@ class Car:
 
     def __init__(self):
         # Load Car Sprite and Rotate
-        sprite_path = os.path.join("C:/Users/Tanner/Documents/GitHub/Assets", "car.png")
+        sprite_path = os.path.join(r"C:\Users\Tanner\Documents\GitHub\Assets", "car.png")
         self.sprite = pygame.image.load(sprite_path).convert_alpha()
         
         self.clock = pygame.time.Clock()
         self.sprite = pygame.transform.scale(self.sprite, (CAR_SIZE_X, CAR_SIZE_Y))
         self.rotated_sprite = self.sprite 
 
-        self.position = [1000, 920] # Starting Position
+        self.position = [0, 0] # Starting Position
         self.angle = 0
         self.speed = 0
 
         self.speed_set = False
-
 
         self.center = [self.position[0] + CAR_SIZE_X / 2, self.position[1] + CAR_SIZE_Y / 2] # Calculate Center
 
@@ -207,6 +206,8 @@ def run_simulation(genomes, config):
         g.fitness = 0
         cars.append(Car())
     
+
+    #pygame.draw.circle(game_map, (255, 0, 0), ((track_points[6][0]), (track_points[6][1])), 10)
     start_point = track_points[6]   # set starting point to point 6 (Top of the track)
     next_point = track_points[7] # set next point to point 7
     tangent_x = next_point[0] - start_point[0] # calculate x value for the slope of the tangent
@@ -225,11 +226,6 @@ def run_simulation(genomes, config):
 
 
     global current_generation
-    track.generatePoints()
-    track.calculateTangets()
-    track_points = track.points
-    track.drawTrack(screen)
-    game_map = pygame.image.load(game_map_path)
     current_generation += 1
 
     # Simple Counter To Roughly Limit Time (Not Good Practice)
@@ -289,7 +285,7 @@ def run_simulation(genomes, config):
         text_rect.topleft = (10, 50)  # Set the top left position of the text
         screen.blit(text, text_rect)
         
-        pygame.display.update() # update screen to show cars drawn        
+        pygame.display.update() # update screen to show cars drawn
         clock.tick(60) # 60 FPS
 
 if __name__ == "__main__":
